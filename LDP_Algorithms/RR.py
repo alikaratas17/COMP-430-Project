@@ -8,9 +8,9 @@ class RR(LDP_Base):
     self.D = [0,1]
 
   def f(self,v):
-    if np.random.uniform()>0.5:
+    if np.random.uniform()>=0.5:
       return v
-    if np.random.uniform()>0.5:
+    if np.random.uniform()>=0.5:
       return self.D[0]
     return self.D[1]
 
