@@ -1,4 +1,4 @@
-from LDP_Base import LDP_Base
+from .LDP_Base import LDP_Base
 import numpy as np
 
 class RR(LDP_Base):
