@@ -3,10 +3,12 @@ import numpy as np
 
 class RR(LDP_Base):
 
-  def __init__(self,epsilon):
+  def __init__(self,epsilon=None):
     self.epsilon = epsilon
     self.D = [0,1]
 
+# RR algorithm
+# v is the real response value
   def f(self,v):
     if np.random.uniform()>=0.5:
       return v
@@ -14,6 +16,7 @@ class RR(LDP_Base):
       return self.D[0]
     return self.D[1]
 
+# calculate c(n_v) (unbiased estimator)
   def g(self, y_values:dict)->dict:
     results = {}
     item0 = self.D[0]
