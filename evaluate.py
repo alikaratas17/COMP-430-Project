@@ -1,4 +1,5 @@
 from LDP_Algorithms import LDP_Base, RR, GRR
+import numpy as np
 
 def evaluate(algorithm: LDP_Base, epsilon, original_data):
     validate_f(LDP_Base, epsilon, original_data)
@@ -10,13 +11,21 @@ def validate_f(algorithm: LDP_Base, epsilon):
 
 
 # validate g to see whether the output of g converges to n_v
-def validate_g(algorithm: LDP_Base, original_data, f_output_data, treshold):
+def validate_g(algorithm: LDP_Base, original_data, f_output_data, threshold):
     estimator = algorithm.g(f_output_data)
+    deltas = []
     for item in original_data:
-        if (abs(estimator[item] - original_data[item]))/max(estimator[item], original_data[item]) > treshold:
-            print("g() is not unbiased")
-            return False
-    print("g() is unbiased")
-    return True
+        #print(item)
+        #print(estimator[item])
+        #print(original_data[item])
+        delta = 100.0*abs(estimator[item] - original_data[item])/original_data[item]
+        deltas.append(delta)
+        #print(delta)
+        #if  delta> threshold:
+        #    print(f"For threshold {threshold}: g() is not unbiased")
+        #    return False
+    #print(f"For threshold {threshold}: g() is unbiased")
+    #return True
+    return np.array(deltas).max(),np.array(deltas).mean()
     
     
