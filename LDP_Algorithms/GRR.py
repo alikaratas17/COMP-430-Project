@@ -16,7 +16,7 @@ class GRR(LDP_Base):
 
   def g(self, y_values:dict)->dict:
     results = {}
-    total = np.array(y_values.values()).sum()
+    total = np.array(list(y_values.values())).sum()
     for item in self.D:
       results[item] = (y_values[item] - total*self.q)/(self.p-self.q)
     return results

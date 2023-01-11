@@ -3,7 +3,7 @@ import numpy as np
 
 class RR(LDP_Base):
 
-  def __init__(self,epsilon):
+  def __init__(self,epsilon=None):
     self.epsilon = epsilon
     self.D = [0,1]
 
