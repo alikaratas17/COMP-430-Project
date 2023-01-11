@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class LDP_Base(ABC):
   @abstractmethod
-  def __init__(self,epsilon):
+  def __init__(self,epsilon:float):
     pass
   @abstractmethod
   def f(self,v):
@@ -12,4 +12,7 @@ class LDP_Base(ABC):
     pass
   @abstractmethod
   def getD(self)->list:
+    pass
+  @abstractmethod
+  def isVectorized(self)->bool:
     pass

@@ -66,7 +66,11 @@ def estimateEpsilonNonVectorized(algo,initial_amount,incremental_amount=None,sam
   return max_estimate
 
 N = 10000
-for epsilon in [0.25, 0.5, 0.75, 0.9, 1.0, 1.25, 1.5]:
+N_str = str(N)
+if len(N_str)>3:
+  N_str = N_str[:-3]+","+N_str[-3:]
+print("Number of samples for each v:",N_str)
+for epsilon in [0.25, 0.5, 0.75, 0.9, 1.0, 1.25, 1.5,2.0,2.5]:
   grr = GRR.GRR(epsilon,10)
   estim = estimateEpsilonNonVectorized(grr,N)
   print(f"Actual epsilon: {epsilon}, Esimate: {estim}")

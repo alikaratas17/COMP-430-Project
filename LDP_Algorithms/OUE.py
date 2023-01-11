@@ -24,4 +24,6 @@ class OUE(LDP_Base):
     return results
   def getD(self)->list:
     return self.D
+  def isVectorized(self)->bool:
+    return True
 

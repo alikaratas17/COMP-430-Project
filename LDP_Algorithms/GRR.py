@@ -4,6 +4,7 @@ import numpy as np
 class GRR(LDP_Base):
 
   def __init__(self,epsilon,max_D=50):
+    self.is_vectorized = False
     self.epsilon = epsilon
     self.D = list(range(max_D))
     self.p = np.exp(self.epsilon)/(np.exp(self.epsilon)+len(self.D)-1)
@@ -22,4 +23,5 @@ class GRR(LDP_Base):
     return results
   def getD(self)->list:
     return self.D
-
+  def isVectorized(self)->bool:
+    return False

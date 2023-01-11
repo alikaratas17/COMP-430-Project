@@ -28,4 +28,6 @@ class RR(LDP_Base):
 
   def getD(self)->list:
     return self.D
+  def isVectorized(self)->bool:
+    return False
 
