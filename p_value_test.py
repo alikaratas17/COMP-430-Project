@@ -1,4 +1,5 @@
 from LDP_Algorithms import GRR
+from LDP_Algorithms import RR
 from tqdm import tqdm
 import numpy as np
 import hypergeom as hypergeom
@@ -11,7 +12,7 @@ def pValueTestNonVectorized(algo, epsilon, n=1000):
     results = []
     for v1 in D:
         for v2 in D:
-            if v1 != v2:
+            if v1 < v2:
                 O1 = []
                 O2 = []
                 for i in range(n):
@@ -103,4 +104,4 @@ for epsilon in [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]:
     result = pValueTestNonVectorized(grr, epsilon, 10000)
     epsilon_results[epsilon] = result
     plot_result(epsilon_results, "epsilon",
-                "p_value", "result.png")
+                "p_value", "grr.png")
