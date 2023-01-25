@@ -1,10 +1,27 @@
+import argparse
 import evaluate
+from LDP_Algorithms import RR
 from LDP_Algorithms import GRR
 import random
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--algo", type=str, required=True)
+    #parser.add_argument("-v", "--vectorized", action="store_true")
+    parser.add_argument("-e", "--epsilon", type=float, required=True)
+
+
+
+    args = parser.parse_args()
+    if args.algo == "RR":
+        algo = RR.RR(args.epsilon)
+    elif args.algo == "GRR":
+        algo = GRR.GRR(args.epsilon)
+
+    evaluate.evaluate(algo)
+
     x = []
     y = []
     y2 = []
@@ -55,6 +72,7 @@ def main():
     plt.ylabel('Absolute Differences in Percentage')
     plt.title('GRR Convergence Experiment with Epsilon = {}'.format(eps))
     plt.show()
+
 
 def main2():
     D = 10
