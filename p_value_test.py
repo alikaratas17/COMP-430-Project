@@ -1,9 +1,9 @@
-from LDP_Algorithms import GRR
-from LDP_Algorithms import RR
+from LDP_Algorithms import GRR, RR, SimpleRAPPOR, OUE
 from tqdm import tqdm
 import numpy as np
 import hypergeom as hypergeom
 import matplotlib.pyplot as plt
+import math
 
 
 def pValueTestNonVectorized(algo, epsilon, n=1000):
@@ -26,6 +26,38 @@ def pValueTestNonVectorized(algo, epsilon, n=1000):
                             c1 += 1
                     for el in O2:
                         if el == v:
+                            c2 += 1
+                    if c1 > c2:
+                        p_val = pvalue(c1, c2, epsilon, n)
+                    else:
+                        p_val = pvalue(c2, c1, epsilon, n)
+                    p_values.append(p_val)
+                    results.append([epsilon, p_val, v1, v2,  n, v])
+    return results
+
+
+def pValueTestVectorized(algo, epsilon, n=1000):
+    D = algo.getD()
+    p_values = []
+    results = []
+    for v1 in D:
+        for v2 in D:
+            if v1 < v2:
+                O1 = []
+                O2 = []
+                for i in range(n):
+                    O1.append(algo.f(v1))
+                    O2.append(algo.f(v2))
+                c1 = 0
+                c2 = 0
+                for v in D:
+                    vect = np.array([0 for _ in D])
+                    vect[v] = 1
+                    for el in O1:
+                        if np.array_equal(el, vect):
+                            c1 += 1
+                    for el in O2:
+                        if np.array_equal(el, vect):
                             c2 += 1
                     if c1 > c2:
                         p_val = pvalue(c1, c2, epsilon, n)
@@ -98,10 +130,11 @@ def plot_result(data, xlabel, ylabel, output_filename):
 # ***** statdp github repo ***** #
 
 
+
 epsilon_results = {}
 for epsilon in [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]:
-    grr = GRR.GRR(epsilon, 10)
-    result = pValueTestNonVectorized(grr, epsilon, 10000)
+    grr = OUE.OUE(epsilon, 10)
+    result = pValueTestVectorized(grr, epsilon, 50000)
     epsilon_results[epsilon] = result
     plot_result(epsilon_results, "epsilon",
-                "p_value", "grr.png")
+                "p_value", "oue-return-true-values.png")
