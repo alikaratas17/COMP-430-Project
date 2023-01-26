@@ -4,7 +4,11 @@ import numpy as np
 
 class SimpleRAPPOR(LDP_Base):
 
+<<<<<<< HEAD
     def __init__(self, epsilon, max_D=6):
+=======
+    def __init__(self, epsilon, max_D=10):
+>>>>>>> 0918b1446c1d358b93185cf80e46e4bbfa793ce2
         self.epsilon = epsilon
         self.D = list(range(max_D))
         self.p = np.exp(self.epsilon/2)/(np.exp(self.epsilon/2)+1)

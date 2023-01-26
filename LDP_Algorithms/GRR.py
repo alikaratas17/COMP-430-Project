@@ -3,7 +3,7 @@ import numpy as np
 
 class GRR(LDP_Base):
 
-  def __init__(self,epsilon,max_D=50):
+  def __init__(self,epsilon,max_D=10):
     self.is_vectorized = False
     self.epsilon = epsilon
     self.D = list(range(max_D))
