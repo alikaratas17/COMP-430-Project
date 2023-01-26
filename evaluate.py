@@ -61,7 +61,7 @@ def convergence_experiment(algo,N,nums=None):
 if __name__ == '__main__':
     a,b = convergence_experiment(GRR.GRR(0.9,10),100)
     #a,b = convergence_experiment(SimpleRAPPOR.SimpleRAPPOR(0.9,10),100)
-    p_value_plot_experiment(GRR.GRR(0.9,10),0.9,[0.00, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0],"GRR6",1000)
+    p_value_plot_experiment(GRR.GRR(0.9,50),0.9,[0.00, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0],"GRR6",1000)
     print(a)
     print(b)
     #print(convergence_experiment(SimpleRAPPOR.SimpleRAPPOR(0.9,4),10000))
