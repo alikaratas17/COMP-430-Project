@@ -8,7 +8,7 @@ class LDP_Base(ABC):
   def f(self,v):
     pass
   @abstractmethod
-  def g(self, y_values)->dict:
+  def g(self, y_values,total)->dict:
     pass
   @abstractmethod
   def getD(self)->list:

@@ -69,36 +69,7 @@ def main():
 
 
 def main4():
-    N = 100
-    x = []
-    y = []
-    y2 = []
-    D = 10
-    MAX_NUM = 2000
-    MIN_NUM = 1000
-    #max_str = str(MAX_NUM)
-    #min_str = str(MIN_NUM)
-    #max_str = max_str[:-3]+","+max_str[-3:]
-    #min_str = min_str[:-3]+","+min_str[-3:]
-    #print(f"Each v amount in range ({min_str}, {max_str})")
-    inputs = {}
-    for d in range(D):
-        inputs[d]=random.randint(MIN_NUM,MAX_NUM)
-    eps = 1.0
-    grr = GRR.GRR(eps,D)
-    totals = np.array([0.0 for _ in range(D)])
-    for _ in tqdm(range(N)):
-        results = {}
-        for d in range(D):
-            results[d]= 0
-        for d in range(D):
-            for _ in range(inputs[d]):
-                results[grr.f(d)]+=1
-        estimates = np.array(list(grr.g(results).values()))
-        totals += estimates
-    print(f"Results of Convergence Estimation with GRR for Epsilon = {eps}, RepeatNum = {N}, D = {D}")
-    for d in range(D):
-        print(f"For value {d}, Actual: {inputs[d]}, Average Prediction: {totals[d]/N}, Percentage Difference: {round(10000*(totals[d]/N-inputs[d])/inputs[d])/100}%")
+    
 
 
 
@@ -124,6 +95,7 @@ def main2():
                 results[grr.f(d)]+=1
         max_change = evaluate.validate_g(grr,inputs,results, None)
         print(f"For Epsilon {eps} Highest Absolute Change Percentage was {round(max_change*10)/10}%")
+
 def main3():
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--algo", type=str, required=True)

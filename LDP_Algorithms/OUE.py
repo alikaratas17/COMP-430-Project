@@ -17,9 +17,9 @@ class OUE(LDP_Base):
             vect[v] = 0
         return vect
 
-    def g(self, y_values: dict) -> dict:
+    def g(self, y_values: dict,total) -> dict:
         results = {}
-        total = np.array(y_values.values()).sum()
+        #total = np.array(list(y_values.values())).sum()
         for item in self.D:
             results[item] = 2.0*((np.exp(self.epsilon)+1) *
                                  y_values[item] - total)/(np.exp(self.epsilon)-1)

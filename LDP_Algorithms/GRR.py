@@ -15,7 +15,7 @@ class GRR(LDP_Base):
     probs[self.D.index(v)] = self.p
     return np.random.choice(self.D,p=probs)
 
-  def g(self, y_values:dict)->dict:
+  def g(self, y_values:dict,total)->dict:
     results = {}
     total = np.array(list(y_values.values())).sum()
     for item in self.D:

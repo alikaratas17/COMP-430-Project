@@ -18,9 +18,9 @@ def pValueTestNonVectorized(algo, epsilon, n=1000):
                 for i in range(n):
                     O1.append(algo.f(v1))
                     O2.append(algo.f(v2))
-                c1 = 0
-                c2 = 0
                 for v in D:
+                    c1 = 0
+                    c2 = 0
                     for el in O1:
                         if el == v:
                             c1 += 1
@@ -32,14 +32,23 @@ def pValueTestNonVectorized(algo, epsilon, n=1000):
                     else:
                         p_val = pvalue(c2, c1, epsilon, n)
                     p_values.append(p_val)
-                    results.append([epsilon, p_val, v1, v2,  n, v])
-    return results
+                    #results.append([epsilon, p_val, v1, v2,  n, v])
+                    results.append([epsilon,p_val])
+    return [(epsilon,np.array(p_values).min())]#results
 
 
 def pValueTestVectorized(algo, epsilon, n=1000):
     D = algo.getD()
     p_values = []
     results = []
+    Y = [[]]
+    for d in D:
+        new_Y = []
+        for y in Y:
+            new_Y.append(y+[0])
+            new_Y.append(y+[1])
+        Y = new_Y
+        
     for v1 in D:
         for v2 in D:
             if v1 < v2:
@@ -48,24 +57,26 @@ def pValueTestVectorized(algo, epsilon, n=1000):
                 for i in range(n):
                     O1.append(algo.f(v1))
                     O2.append(algo.f(v2))
-                c1 = 0
-                c2 = 0
-                for v in D:
-                    vect = np.array([0 for _ in D])
-                    vect[v] = 1
+                for v in Y:
+                    c1 = 0
+                    c2 = 0
+                    #vect = np.array([0 for _ in D])
+                    #vect[v] = 1
                     for el in O1:
-                        if np.array_equal(el, vect):
+                        if np.array_equal(el,v):
                             c1 += 1
                     for el in O2:
-                        if np.array_equal(el, vect):
+                        if np.array_equal(el,v):
                             c2 += 1
                     if c1 > c2:
                         p_val = pvalue(c1, c2, epsilon, n)
                     else:
+                        if c2 ==0:
+                            continue
                         p_val = pvalue(c2, c1, epsilon, n)
                     p_values.append(p_val)
                     results.append([epsilon, p_val, v1, v2,  n, v])
-    return results
+    return [(epsilon,np.array(p_values).min())]
 
 # ***** statdp github repo ***** #
 
@@ -129,12 +140,12 @@ def plot_result(data, xlabel, ylabel, output_filename):
 
 # ***** statdp github repo ***** #
 
-
-
-epsilon_results = {}
-for epsilon in [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]:
-    grr = OUE.OUE(epsilon, 10)
-    result = pValueTestVectorized(grr, epsilon, 50000)
-    epsilon_results[epsilon] = result
-    plot_result(epsilon_results, "epsilon",
-                "p_value", "oue-return-true-values.png")
+if __name__=='__main__':
+    epsilon_results = {}
+    eps = 0.9
+    algo = SimpleRAPPOR.SimpleRAPPOR(eps, 5)
+    result = []
+    for epsilon in tqdm([0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]):
+        result = result + pValueTestVectorized(algo, epsilon, 10000)
+    epsilon_results[eps] = result
+    plot_result(epsilon_results, "epsilon","p_value", "simpleRAPPOR-return-true-values.png")

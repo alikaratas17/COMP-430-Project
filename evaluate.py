@@ -1,31 +1,67 @@
-from LDP_Algorithms import LDP_Base, RR, GRR
+from LDP_Algorithms import LDP_Base, RR, GRR,SimpleRAPPOR
 import numpy as np
+from p_value_test import pValueTestVectorized, pValueTestNonVectorized,plot_result
+import random
+from tqdm import tqdm
+from direct_epsilon_estimation import estimateEpsilonNonVectorized,estimateEpsilonVectorized
+from convergence_test import convergence_test_vectorized,convergence_test_non_vectorized
 
-def evaluate(algorithm: LDP_Base, epsilon, original_data):
-    validate_f(LDP_Base, epsilon, original_data)
-    validate_g(LDP_Base, original_data)
+def p_value_plot_experiment(algo:LDP_Base,original_epsilon,epsilon_values,plot_save_name,N):
+    epsilon_results = {}
+    result = []
+    for epsilon in tqdm(epsilon_values):
+        if algo.isVectorized():
+            result = result + pValueTestVectorized(algo, epsilon, N)
+        else:
+            result = result + pValueTestNonVectorized(algo, epsilon, N)
+    epsilon_results[original_epsilon] = result
+    plot_result(epsilon_results, "epsilon","p_value", plot_save_name)
 
-# validate f satisfies the definition of LDP (p-value test)
-def validate_f(algorithm: LDP_Base, epsilon):
-    pass
+def p_value_estimate_experiment(algo:LDP_Base,N):
+    estimate = 0.5
+    delta_eps = 0.5
+    prev_dir = None
+    multip_N = 2
+    P_VAL_ERROR_MARGIN=0.01
+    while delta_eps > 0.01:
+        if algo.isVectorized():
+            p_val = pValueTestVectorized(algo, estimate, N)[0][-1]
+        else:
+            p_val = pValueTestNonVectorized(algo, estimate, N)[0][-1]
+        #print(p_val)
+        if p_val <0.05:
+            if prev_dir=='BACKWARD':
+                delta_eps /=2
+                N =round(N* multip_N)
+            estimate += delta_eps
+            #print(estimate)
+            prev_dir = 'FORWARD'
+        else:
+            if prev_dir=='FORWARD':
+                delta_eps /=2
+                N =round(N* multip_N)
+            prev_dir = 'BACKWARD'
+            estimate -=delta_eps
+            #print(estimate)
+    return estimate
+
+def direct_epsilon_estimation_experiment(algo:LDP_Base,N):
+    if algo.isVectorized():
+        return estimateEpsilonVectorized(algo,N)
+    else:
+        return estimateEpsilonNonVectorized(algo,N)
+
+def convergence_experiment(algo,N,nums=None):
+    if algo.isVectorized():
+        return convergence_test_vectorized(algo,N,nums)
+    else:
+        return convergence_test_non_vectorized(algo,N,nums)
 
 
-# validate g to see whether the output of g converges to n_v
-def validate_g(algorithm: LDP_Base, original_data, f_output_data, threshold):
-    estimator = algorithm.g(f_output_data)
-    deltas = []
-    for item in original_data:
-        #print(item)
-        #print(estimator[item])
-        #print(original_data[item])
-        delta = 100.0*abs(estimator[item] - original_data[item])/original_data[item]
-        deltas.append(delta)
-        #print(delta)
-        #if  delta> threshold:
-        #    print(f"For threshold {threshold}: g() is not unbiased")
-        #    return False
-    #print(f"For threshold {threshold}: g() is unbiased")
-    #return True
-    return np.array(deltas).max(),np.array(deltas).mean()
-    
-    
+if __name__ == '__main__':
+    a,b = convergence_experiment(GRR.GRR(0.9,10),100)
+    #a,b = convergence_experiment(SimpleRAPPOR.SimpleRAPPOR(0.9,10),100)
+    print(a)
+    print(b)
+    #print(convergence_experiment(SimpleRAPPOR.SimpleRAPPOR(0.9,4),10000))
+    #print(direct_epsilon_estimation_experiment(SimpleRAPPOR.SimpleRAPPOR(0.9,4),10000))
