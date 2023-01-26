@@ -22,12 +22,16 @@ def main():
     if args.mode == 1:
         n = args.iteration if args.iteration else 100
         arr1, arr2 = evaluate.convergence_experiment(algo, n)
+        for i in range(len(arr1)):
+            print("{} - {}".format(arr1[i],arr2[i]))
     elif args.mode == 2:
         n = args.iteration if args.iteration else 1000
         result = evaluate.direct_epsilon_estimation_experiment(algo, n)
+        print(result)
     elif args.mode == 3:
         n = args.iteration if args.iteration else 1000
         result = evaluate.p_value_estimate_experiment(algo, n)
+        print(result)
     elif args.mode == 4:
         n = args.iteration if args.iteration else 1000
         evaluate.p_value_plot_experiment(algo, args.epsilon, [0.00, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0], "result", n)

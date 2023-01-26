@@ -21,7 +21,7 @@ def p_value_estimate_experiment(algo:LDP_Base,N):
     estimate = 0.5
     delta_eps = 0.5
     prev_dir = None
-    multip_N = 2
+    multip_N = 1.5
     P_VAL_ERROR_MARGIN=0.01
     while delta_eps > 0.01:
         if algo.isVectorized():
@@ -34,7 +34,7 @@ def p_value_estimate_experiment(algo:LDP_Base,N):
                 delta_eps /=2
                 N =round(N* multip_N)
             estimate += delta_eps
-            #print(estimate)
+            print(estimate)
             prev_dir = 'FORWARD'
         else:
             if prev_dir=='FORWARD':
@@ -42,7 +42,7 @@ def p_value_estimate_experiment(algo:LDP_Base,N):
                 N =round(N* multip_N)
             prev_dir = 'BACKWARD'
             estimate -=delta_eps
-            #print(estimate)
+            print(estimate)
     return estimate
 
 def direct_epsilon_estimation_experiment(algo:LDP_Base,N):
