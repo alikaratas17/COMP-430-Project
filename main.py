@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--algo", type=str, required=True)
-    parser.add_argument("-e", "--epsilon", type=float, required=True)
-    parser.add_argument("-m", "--mode", type=int, required=True)
-    parser.add_argument("-n", "--iteration", type=int)
+    parser.add_argument("-a", "--algo", type=str, required=True, help='Enter Algorithm Name')
+    parser.add_argument("-e", "--epsilon", type=float, required=True, help='Enter Epsilon Value for the algorithm')
+    parser.add_argument("-m", "--mode", type=int, required=True, help='Enter Mode of the experiment: \n1: Convergence \n2: Direct Epsilon Estimation \n3: P-value Estimation\n4: P-value Plot')
+    parser.add_argument("-n", "--iteration", type=int,help='Enter number of iterations')
     
     
 
@@ -88,7 +88,7 @@ def main():
     plt.show()
 
 """
-
+'''
 def main2():
     D = 10
     MAX_NUM = 200000
@@ -197,6 +197,6 @@ def main5():
                 results[grr.f(d)]+=1
         max_change = evaluate.validate_g(grr,inputs,results, None)
         print(f"For Epsilon {eps} Highest Absolute Change Percentage was {round(max_change*10)/10}%")
-
+'''
 if __name__ == "__main__":
     main()
