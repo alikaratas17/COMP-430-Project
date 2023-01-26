@@ -8,14 +8,34 @@ import matplotlib.pyplot as plt
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--algo", type=str, required=True)
-    #parser.add_argument("-v", "--vectorized", action="store_true")
     parser.add_argument("-e", "--epsilon", type=float, required=True)
+    parser.add_argument("-m", "--mode", type=int, required=True)
+    parser.add_argument("-n", "--iteration", type=int)
+    
+    
 
     args = parser.parse_args()
     exec("from LDP_Algorithms import " + args.algo)
     algo = eval(args.algo + "." + args.algo + "(" + str(args.epsilon) + ")")
-    evaluate.evaluate(algo)
 
+
+    if args.mode == 1:
+        n = args.iteration if args.iteration else 100
+        arr1, arr2 = evaluate.convergence_experiment(algo, n)
+    elif args.mode == 2:
+        n = args.iteration if args.iteration else 1000
+        result = evaluate.direct_epsilon_estimation_experiment(algo, n)
+    elif args.mode == 3:
+        n = args.iteration if args.iteration else 1000
+        result = evaluate.p_value_estimate_experiment(algo, n)
+    elif args.mode == 4:
+        n = args.iteration if args.iteration else 1000
+        evaluate.p_value_plot_experiment(algo, args.epsilon, [0.00, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0], "result", n)
+    else:
+        ValueError("Invalid mode")
+
+  
+    """
     x = []
     y = []
     y2 = []
@@ -67,11 +87,7 @@ def main():
     plt.title('GRR Convergence Experiment with Epsilon = {}'.format(eps))
     plt.show()
 
-
-def main4():
-    
-
-
+"""
 
 def main2():
     D = 10
